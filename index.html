@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desperdício de Água no Brasil</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul-profundo: #0a1628;
+    --azul-meia-noite: #0d1f3c;
+    --azul-agua: #1a4a6b;
+    --ciano: #00b4d8;
+    --ciano-claro: #48cae4;
+    --aqua: #90e0ef;
+    --branco: #f0f8ff;
+    --dourado: #c9a96e;
+    --vermelho-alerta: #e63946;
+    --verde-esperanca: #2ec4b6;
+    --cinza-suave: #8a9bb0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--azul-profundo);
+    color: var(--branco);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 110%, rgba(0,180,216,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 20% 20%, rgba(26,74,107,0.4) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(0,180,216,0.08) 0%, transparent 50%),
+      var(--azul-profundo);
+    z-index: 0;
+  }
+
+  .wave-anim {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 220px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+  }
+
+  .kicker {
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ciano);
+    margin-bottom: 1.4rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--branco);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s ease forwards;
+  }
+
+  h1 span { color: var(--ciano); }
+
+  .hero-sub {
+    margin-top: 1.6rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--aqua);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.65s ease forwards;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.85s ease forwards;
+  }
+
+  .hero-stat {
+    background: rgba(0,180,216,0.08);
+    border: 1px solid rgba(0,180,216,0.25);
+    border-radius: 12px;
+    padding: 1.2rem 1.8rem;
+    text-align: center;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--ciano);
+    display: block;
+  }
+
+  .hero-stat .label {
+    font-size: 0.78rem;
+    color: var(--aqua);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 0.3rem;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--cinza-suave);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: fadeUp 1s 1.2s ease forwards;
+    opacity: 0;
+  }
+
+  .scroll-arrow {
+    width: 24px; height: 24px;
+    border-right: 1.5px solid var(--ciano);
+    border-bottom: 1.5px solid var(--ciano);
+    transform: rotate(45deg);
+    animation: bounce 1.6s infinite;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  section {
+    padding: 5rem 0;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ciano);
+    margin-bottom: 0.7rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--branco);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em { color: var(--ciano); font-style: normal; }
+
+  .section-intro {
+    font-size: 1.05rem;
+    color: var(--aqua);
+    line-height: 1.75;
+    max-width: 680px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ciano), transparent);
+    margin: 1.2rem 0 1.6rem;
+  }
+
+  /* ── INTRO SECTION ── */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .intro-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #c8d8e8;
+    margin-bottom: 1.2rem;
+  }
+
+  .intro-text strong { color: var(--ciano-claro); font-weight: 500; }
+
+  .big-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-style: italic;
+    color: var(--branco);
+    line-height: 1.5;
+    border-left: 3px solid var(--ciano);
+    padding-left: 1.5rem;
+  }
+
+  .big-quote span { color: var(--ciano); }
+
+  /* ── STAT CARDS GRID ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(0,180,216,0.15);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(0,180,216,0.5);
+    transform: translateY(-4px);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--ciano), var(--verde-esperanca));
+  }
+
+  .stat-card.alert::before {
+    background: linear-gradient(90deg, var(--vermelho-alerta), #ff6b6b);
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--ciano);
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-card.alert .stat-num { color: var(--vermelho-alerta); }
+
+  .stat-desc {
+    font-size: 0.9rem;
+    color: var(--aqua);
+    line-height: 1.5;
+  }
+
+  /* ── CAUSES ── */
+  .causes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .cause-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: background 0.3s;
+  }
+
+  .cause-item:hover { background: rgba(0,180,216,0.06); }
+
+  .cause-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    width: 3rem;
+    text-align: center;
+  }
+
+  .cause-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--branco);
+    margin-bottom: 0.4rem;
+  }
+
+  .cause-desc {
+    font-size: 0.84rem;
+    color: var(--cinza-suave);
+    line-height: 1.55;
+  }
+
+  /* ── CONSEQUENCES BANNER ── */
+  .consequences-section {
+    background: rgba(230,57,70,0.05);
+    border-top: 1px solid rgba(230,57,70,0.15);
+    border-bottom: 1px solid rgba(230,57,70,0.15);
+  }
+
+  .cons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  .cons-card {
+    padding: 2rem;
+    border-radius: 16px;
+    position: relative;
+  }
+
+  .cons-card.ambiental { background: rgba(46,196,182,0.07); border: 1px solid rgba(46,196,182,0.2); }
+  .cons-card.social    { background: rgba(230,57,70,0.07);  border: 1px solid rgba(230,57,70,0.2); }
+  .cons-card.economico { background: rgba(201,169,110,0.07); border: 1px solid rgba(201,169,110,0.2); }
+
+  .cons-tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  .cons-card.ambiental .cons-tag { color: var(--verde-esperanca); }
+  .cons-card.social .cons-tag    { color: var(--vermelho-alerta); }
+  .cons-card.economico .cons-tag { color: var(--dourado); }
+
+  .cons-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 1rem;
+  }
+
+  .cons-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .cons-list li {
+    font-size: 0.9rem;
+    color: #b8ccd8;
+    line-height: 1.5;
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .cons-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--cinza-suave);
+  }
+
+  /* ── REGION BAR CHART ── */
+  .region-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .region-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 60px;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .region-name {
+    font-size: 0.88rem;
+    color: var(--branco);
+    font-weight: 500;
+  }
+
+  .bar-track {
+    height: 10px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--ciano), var(--ciano-claro));
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .bar-fill.danger { background: linear-gradient(90deg, var(--vermelho-alerta), #ff6b6b); }
+  .bar-fill.warn   { background: linear-gradient(90deg, var(--dourado), #f4c670); }
+
+  .bar-pct {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ciano);
+    text-align: right;
+  }
+
+  .bar-pct.danger { color: var(--vermelho-alerta); }
+  .bar-pct.warn   { color: var(--dourado); }
+
+  /* ── SOLUTIONS ── */
+  .solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .sol-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .sol-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(46,196,182,0.4);
+  }
+
+  .sol-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--verde-esperanca), var(--ciano));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .sol-card:hover::after { transform: scaleX(1); }
+
+  .sol-icon-wrap {
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    background: rgba(46,196,182,0.12);
+    border: 1px solid rgba(46,196,182,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .sol-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 0.7rem;
+  }
+
+  .sol-desc {
+    font-size: 0.88rem;
+    color: var(--cinza-suave);
+    line-height: 1.65;
+  }
+
+  /* ── WHAT YOU CAN DO ── */
+  .actions-band {
+    background: rgba(0,180,216,0.05);
+    border-top: 1px solid rgba(0,180,216,0.12);
+    border-bottom: 1px solid rgba(0,180,216,0.12);
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .action-tile {
+    background: rgba(0,180,216,0.06);
+    border: 1px solid rgba(0,180,216,0.18);
+    border-radius: 12px;
+    padding: 1.4rem 1.2rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .action-tile:hover { background: rgba(0,180,216,0.13); }
+
+  .action-tile .icon { font-size: 1.8rem; margin-bottom: 0.7rem; }
+
+  .action-tile p {
+    font-size: 0.84rem;
+    color: var(--aqua);
+    line-height: 1.5;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--ciano), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 4px;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--ciano);
+    box-shadow: 0 0 10px var(--ciano);
+  }
+
+  .tl-year {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ciano);
+    margin-bottom: 0.3rem;
+  }
+
+  .tl-event {
+    font-weight: 500;
+    color: var(--branco);
+    margin-bottom: 0.3rem;
+  }
+
+  .tl-desc {
+    font-size: 0.85rem;
+    color: var(--cinza-suave);
+    line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3rem 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 0.78rem;
+    color: var(--cinza-suave);
+    line-height: 1.7;
+  }
+
+  footer a { color: var(--ciano); text-decoration: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50%       { transform: rotate(45deg) translateY(6px); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .intro-grid { grid-template-columns: 1fr; }
+    .region-row { grid-template-columns: 100px 1fr 50px; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,22,40,0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--ciano);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cinza-suave);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ciano); }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+
+  /* alert pill */
+  .pill {
+    display: inline-block;
+    background: rgba(230,57,70,0.15);
+    border: 1px solid rgba(230,57,70,0.35);
+    color: #ff8a93;
+    font-size: 0.73rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.8rem;
+    border-radius: 99px;
+    margin-bottom: 1rem;
+  }
+
+  /* meta strip */
+  .meta-strip {
+    display: flex;
+    gap: 2rem;
+    padding: 1.2rem 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-size: 0.8rem;
+    color: var(--cinza-suave);
+  }
+
+  .meta-item strong { color: var(--aqua); font-weight: 500; }
+
+  /* section bg alt */
+  .alt-bg { background: rgba(255,255,255,0.015); }
+
+  /* full-width visual divider */
+  .vdivider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,180,216,0.25), transparent);
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">H₂O Brasil</span>
+  <ul class="nav-links">
+    <li><a href="#panorama">Panorama</a></li>
+    <li><a href="#causas">Causas</a></li>
+    <li><a href="#consequencias">Consequências</a></li>
+    <li><a href="#solucoes">Soluções</a></li>
+    <li><a href="#acao">Ação</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- animated SVG waves -->
+  <svg class="wave-anim" viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="wg1" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:rgba(0,180,216,0.18)"/>
+        <stop offset="100%" style="stop-color:rgba(72,202,228,0.08)"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,120 C240,60 480,180 720,120 C960,60 1200,180 1440,120 L1440,220 L0,220 Z" fill="url(#wg1)">
+      <animate attributeName="d"
+        values="M0,120 C240,60 480,180 720,120 C960,60 1200,180 1440,120 L1440,220 L0,220 Z;
+                M0,140 C240,100 480,60 720,140 C960,200 1200,80 1440,140 L1440,220 L0,220 Z;
+                M0,120 C240,60 480,180 720,120 C960,60 1200,180 1440,120 L1440,220 L0,220 Z"
+        dur="8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,160 C300,110 600,200 900,150 C1150,110 1300,190 1440,160 L1440,220 L0,220 Z" fill="rgba(0,180,216,0.07)">
+      <animate attributeName="d"
+        values="M0,160 C300,110 600,200 900,150 C1150,110 1300,190 1440,160 L1440,220 L0,220 Z;
+                M0,150 C300,190 600,110 900,165 C1150,200 1300,120 1440,150 L1440,220 L0,220 Z;
+                M0,160 C300,110 600,200 900,150 C1150,110 1300,190 1440,160 L1440,220 L0,220 Z"
+        dur="11s" repeatCount="indefinite"/>
+    </path>
+  </svg>
+
+  <div class="hero-content">
+    <p class="kicker">Relatório · Recursos Hídricos · Brasil 2025</p>
+    <h1>O Brasil está<br><span>desperdiçando</span><br>sua água</h1>
+    <p class="hero-sub">O país que guarda 13% da água doce do planeta perde 40% do que produz antes de chegar às torneiras. Uma crise silenciosa que ameaça milhões de brasileiros.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num">40,31%</span>
+        <span class="label">da água tratada é perdida</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">6.346</span>
+        <span class="label">piscinas olímpicas por dia</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">50 mi</span>
+        <span class="label">pessoas poderiam ser abastecidas</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Explorar</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- PANORAMA -->
+<section id="panorama">
+  <div class="container">
+    <div class="meta-strip reveal">
+      <div class="meta-item">Fonte: <strong>Instituto Trata Brasil / SINISA 2023</strong></div>
+      <div class="meta-item">Publicado: <strong>Novembro 2025</strong></div>
+      <div class="meta-item">Meta legal: <strong>máx. 25% de perdas (Portaria 490/2021)</strong></div>
+    </div>
+
+    <div class="intro-grid reveal">
+      <div class="intro-text">
+        <p class="section-label">O problema</p>
+        <h2 class="section-title">O paradoxo<br>hídrico <em>brasileiro</em></h2>
+        <div class="divider"></div>
+        <p>O Brasil é dono de uma das maiores riquezas do planeta: <strong>cerca de 13% de toda a água doce superficial do mundo</strong>. Apesar disso, o país enfrenta uma contradição profunda. Enquanto 34 milhões de brasileiros ainda não têm acesso à água tratada, bilhões de metros cúbicos são desperdiçados todos os anos.</p>
+        <p>O Estudo de Perdas de Água 2025 (SINISA), conduzido pelo Instituto Trata Brasil em parceria com a GO Associados, revela que <strong>5,8 bilhões de m³</strong> de água tratada foram desperdiçados em apenas um ano. O número equivale a mais de sete vezes o volume total do Sistema Cantareira.</p>
+        <p>Esse cenário se agrava com as mudanças climáticas: a Região Metropolitana de São Paulo registrou em setembro de 2025 o <strong>menor volume armazenado</strong> nos mananciais desde 2013, às vésperas da pior crise hídrica de sua história.</p>
+      </div>
+      <div>
+        <blockquote class="big-quote reveal">
+          "Perdemos diariamente mais de <span>6,3 mil piscinas</span> de água potável. Um exemplo alarmante de ineficiência."
+          <br><br>
+          <small style="font-size:0.75rem; color:var(--cinza-suave); font-family:'DM Sans',sans-serif; font-style:normal;">— Luana Pretto, Presidente Executiva do Trata Brasil</small>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<section style="padding:2rem 0 4rem;">
+  <div class="container">
+    <div class="stats-grid reveal">
+      <div class="stat-card alert">
+        <span class="stat-num">40,31%</span>
+        <p class="stat-desc">da água tratada é desperdiçada antes de chegar ao consumidor (SINISA 2023)</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">5,8 bi</span>
+        <p class="stat-desc">de m³ de água tratada perdidos em um único ano no Brasil</p>
+      </div>
+      <div class="stat-card alert">
+        <span class="stat-num">34 mi</span>
+        <p class="stat-desc">de brasileiros ainda sem acesso à água tratada regularmente</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">7.636</span>
+        <p class="stat-desc">piscinas olímpicas desperdiçadas por dia considerando a água não faturada</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">R$ 1,96 bi</span>
+        <p class="stat-desc">lucro da Sabesp no 2º trimestre de 2025, enquanto perdas em SP seguem no mesmo patamar</p>
+      </div>
+      <div class="stat-card alert">
+        <span class="stat-num">70%</span>
+        <p class="stat-desc">da água tratada não chega às torneiras em Alagoas — o pior índice do país</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- POR REGIÃO -->
+<section class="alt-bg" id="regioes">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Desigualdade regional</p>
+      <h2 class="section-title">Perdas por <em>região</em></h2>
+      <div class="divider"></div>
+      <p class="section-intro">Os piores índices concentram-se nas regiões com menor capacidade de investimento — justamente as mais vulneráveis às mudanças climáticas.</p>
+    </div>
+
+    <div class="region-bars reveal" id="barChart">
+      <div class="region-row">
+        <span class="region-name">Norte</span>
+        <div class="bar-track"><div class="bar-fill danger" data-pct="49.78"></div></div>
+        <span class="bar-pct danger">49,78%</span>
+      </div>
+      <div class="region-row">
+        <span class="region-name">Nordeste</span>
+        <div class="bar-track"><div class="bar-fill danger" data-pct="46.25"></div></div>
+        <span class="bar-pct danger">46,25%</span>
+      </div>
+      <div class="region-row">
+        <span class="region-name">Centro-Oeste</span>
+        <div class="bar-track"><div class="bar-fill warn" data-pct="38"></div></div>
+        <span class="bar-pct warn">≈38%</span>
+      </div>
+      <div class="region-row">
+        <span class="region-name">Sudeste</span>
+        <div class="bar-track"><div class="bar-fill warn" data-pct="35"></div></div>
+        <span class="bar-pct warn">≈35%</span>
+      </div>
+      <div class="region-row">
+        <span class="region-name">Sul</span>
+        <div class="bar-track"><div class="bar-fill" data-pct="30"></div></div>
+        <span class="bar-pct">≈30%</span>
+      </div>
+      <div class="region-row" style="margin-top:0.8rem; opacity:0.6;">
+        <span class="region-name" style="font-size:0.75rem; color:var(--cinza-suave)">Meta legal</span>
+        <div class="bar-track"><div class="bar-fill" style="background:rgba(46,196,182,0.5); width:25%!important; transition:none;"></div></div>
+        <span class="bar-pct" style="color:var(--verde-esperanca); font-size:0.75rem;">25%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- CAUSAS -->
+<section id="causas">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Raízes do problema</p>
+      <h2 class="section-title">Por que a água<br><em>se perde?</em></h2>
+      <div class="divider"></div>
+      <p class="section-intro">As perdas têm origens técnicas, estruturais e culturais. Entender cada uma é o primeiro passo para combatê-las.</p>
+    </div>
+
+    <div class="causes-list reveal">
+      <div class="cause-item">
+        <div class="cause-icon">🔧</div>
+        <div>
+          <p class="cause-title">Vazamentos na rede</p>
+          <p class="cause-desc">Tubulações antigas, mal instaladas ou danificadas liberam água continuamente antes que ela chegue ao consumidor. É a principal fonte de perdas físicas.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">📟</div>
+        <div>
+          <p class="cause-title">Erros de medição</p>
+          <p class="cause-desc">Hidrômetros com falhas ou sem calibração contabilizam volumes incorretos, gerando perdas comerciais que não aparecem nas faturas.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">🚫</div>
+        <div>
+          <p class="cause-title">Consumo não autorizado</p>
+          <p class="cause-desc">Ligações clandestinas e furtos de água representam uma fatia relevante das perdas não faturadas, especialmente em áreas de vulnerabilidade social.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">🏚️</div>
+        <div>
+          <p class="cause-title">Infraestrutura defasada</p>
+          <p class="cause-desc">Redes de abastecimento construídas décadas atrás, sem manutenção adequada, são responsáveis por uma parte expressiva das perdas físicas.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">💸</div>
+        <div>
+          <p class="cause-title">Falta de investimento</p>
+          <p class="cause-desc">Municípios com menor capacidade econômica não conseguem modernizar seus sistemas, perpetuando o ciclo de ineficiência.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">🌊</div>
+        <div>
+          <p class="cause-title">Cultura de abundância</p>
+          <p class="cause-desc">A percepção de que a água é recurso infinito, alimentada pelas grandes reservas do país, retarda mudanças comportamentais e políticas de conservação.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">🌡️</div>
+        <div>
+          <p class="cause-title">Pressão excessiva nas redes</p>
+          <p class="cause-desc">Alta pressão nas tubulações aumenta a taxa de vazamentos e acelera o desgaste dos materiais, ampliando as perdas físicas.</p>
+        </div>
+      </div>
+      <div class="cause-item">
+        <div class="cause-icon">🏭</div>
+        <div>
+          <p class="cause-title">Desperdício industrial e agrícola</p>
+          <p class="cause-desc">Processos produtivos ineficientes e técnicas de irrigação ultrapassadas consomem volumes muito superiores ao necessário em vários setores.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- CONSEQUÊNCIAS -->
+<section id="consequencias" class="consequences-section">
+  <div class="container">
+    <div class="reveal">
+      <span class="pill">⚠ Impacto</span>
+      <p class="section-label">O custo do desperdício</p>
+      <h2 class="section-title">Consequências para<br><em>o Brasil e o planeta</em></h2>
+      <div class="divider"></div>
+      <p class="section-intro">O desperdício não é só um número. Ele se traduz em vidas sem água, rios agonizando e um país menos competitivo e mais vulnerável ao clima.</p>
+    </div>
+
+    <div class="cons-grid reveal">
+      <div class="cons-card ambiental">
+        <span class="cons-tag">🌿 Ambiental</span>
+        <p class="cons-title">A natureza em colapso</p>
+        <ul class="cons-list">
+          <li>Maior captação de rios e aquíferos além da demanda real, pressionando os ecossistemas</li>
+          <li>Secas mais intensas e frequentes em combinação com a degradação das bacias hidrográficas</li>
+          <li>Mananciais comprometidos em todo o país, com SP registrando o menor volume armazenado desde 2013 em setembro de 2025</li>
+          <li>Perda acelerada de biodiversidade nos ecossistemas de água doce</li>
+          <li>Agravamento das mudanças climáticas pelo ciclo hídrico desequilibrado</li>
+        </ul>
+      </div>
+
+      <div class="cons-card social">
+        <span class="cons-tag">🏘️ Social</span>
+        <p class="cons-title">Quem paga a conta</p>
+        <ul class="cons-list">
+          <li>34 milhões de brasileiros sem acesso à água tratada, enquanto bilhões de litros são perdidos</li>
+          <li>Racionamentos e crises de abastecimento que penalizam os mais pobres</li>
+          <li>Risco crescente à saúde pública por falta de água potável e saneamento</li>
+          <li>Desigualdade regional aprofundada: Norte e Nordeste sofrem mais, mas investem menos</li>
+          <li>Comunidades da Amazônia com transporte fluvial e subsistência comprometidos</li>
+        </ul>
+      </div>
+
+      <div class="cons-card economico">
+        <span class="cons-tag">💰 Econômico</span>
+        <p class="cons-title">O peso na economia</p>
+        <ul class="cons-list">
+          <li>Custos de produção maiores para as empresas de saneamento que precisam captar mais água que a necessária</li>
+          <li>Queda potencial de até 40% na disponibilidade de água potável até 2040</li>
+          <li>Demanda por uso de água deve crescer 30% até 2030 (ANA), pressionando ainda mais o sistema</li>
+          <li>Impactos na agricultura, indústria e geração de energia hidrelétrica</li>
+          <li>Necessidade de investimentos urgentes na modernização — sem os quais o custo futuro será muito maior</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- HISTÓRICO -->
+<section id="historico" class="alt-bg">
+  <div class="container">
+    <div class="intro-grid reveal" style="align-items:start; gap:4rem;">
+      <div>
+        <p class="section-label">Linha do tempo</p>
+        <h2 class="section-title">Como chegamos<br><em>até aqui</em></h2>
+        <div class="divider"></div>
+        <p style="font-size:0.95rem; color:var(--cinza-suave); line-height:1.75;">Uma trajetória marcada por crises, alertas ignorados e avanços tímidos diante de um problema estrutural.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <p class="tl-year">2014–2015</p>
+          <p class="tl-event">A Grande Seca de São Paulo</p>
+          <p class="tl-desc">A Região Metropolitana vive a pior crise hídrica de sua história. O Sistema Cantareira chega a volumes críticos e o racionamento entra na pauta nacional.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">2020</p>
+          <p class="tl-event">Curitiba torna obrigatória captação de chuva</p>
+          <p class="tl-desc">O Decreto Municipal 1007/2020 obriga mecanismos de captação pluvial em novas edificações — referência em política pública hídrica no Brasil.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">2021</p>
+          <p class="tl-event">Portaria 490 define metas de perdas</p>
+          <p class="tl-desc">O Ministério do Desenvolvimento Regional estabelece que municípios devem ter no máximo 25% de perdas na distribuição para atingir nível excelente.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">2024</p>
+          <p class="tl-event">Enchentes no RS e seca na Amazônia</p>
+          <p class="tl-desc">A volatilidade climática se manifesta em extremos: o Sul do país afoga enquanto a Amazônia vive a pior seca em décadas, com comunidades ilhadas.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">2025</p>
+          <p class="tl-event">Estudo revela 40,31% de perdas</p>
+          <p class="tl-desc">O Instituto Trata Brasil publica o dado mais alarmante da série histórica: o Brasil desperdiça 6.346 piscinas olímpicas por dia — e a meta de 25% continua distante.</p>
+        </div>
+        <div class="tl-item">
+          <p class="tl-year">2025</p>
+          <p class="tl-event">COP-30 no Brasil</p>
+          <p class="tl-desc">O tema das perdas hídricas ganha urgência com a COP-30 sediada no Brasil. Especialistas cobram que gestão da água seja protagonista nas negociações climáticas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- SOLUÇÕES -->
+<section id="solucoes">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">O caminho à frente</p>
+      <h2 class="section-title">Soluções que<br><em>já funcionam</em></h2>
+      <div class="divider"></div>
+      <p class="section-intro">Tecnologia, legislação, educação e natureza. A resposta ao desperdício hídrico no Brasil existe — e já está sendo aplicada em casos de sucesso pelo país.</p>
+    </div>
+
+    <div class="solutions-grid reveal">
+      <div class="sol-card">
+        <div class="sol-icon-wrap">💧</div>
+        <p class="sol-title">Reúso da Água</p>
+        <p class="sol-desc">Tratar e reutilizar águas cinzas (de pias, chuveiros e lavatórios) para fins não potáveis como descarga e irrigação pode reduzir o consumo em até 40–50% em edifícios. Um hotel que instalou o sistema em 2017 já recuperou o investimento mais de dez vezes.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">🌧️</div>
+        <p class="sol-title">Captação de Água da Chuva</p>
+        <p class="sol-desc">Sistemas residenciais e comerciais captam água pluvial por calhas e cisternas para uso em descargas, lavagem de pisos e irrigação. Em Curitiba, a prática já é obrigatória em novas construções por lei municipal.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">🔬</div>
+        <p class="sol-title">Modernização das Redes</p>
+        <p class="sol-desc">Substituição de tubulações antigas, instalação de sensores de pressão e monitoramento em tempo real permitem detectar e consertar vazamentos antes que desperdicem grandes volumes.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">📡</div>
+        <p class="sol-title">Tecnologia e Big Data</p>
+        <p class="sol-desc">Uso de inteligência artificial para prever falhas na rede, drones para inspeção de tubulações, e hidrômetros inteligentes que alertam o consumidor em tempo real sobre consumo anômalo.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">🌱</div>
+        <p class="sol-title">Soluções Baseadas na Natureza</p>
+        <p class="sol-desc">Restauração de matas ciliares e de bacias hidrográficas aumenta a recarga de aquíferos, protege os mananciais e reduz a evaporação — uma das apostas da The Nature Conservancy no Brasil.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">⚖️</div>
+        <p class="sol-title">Regulação e Governança</p>
+        <p class="sol-desc">Ampliar a meta da Portaria 490/2021, criar incentivos fiscais para empresas de saneamento que reduzam perdas e fortalecer a ANA e o SINISA para monitoramento nacional eficaz.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">🏗️</div>
+        <p class="sol-title">Construções Sustentáveis</p>
+        <p class="sol-desc">Dispersores de vazão, mictórios sem água, irrigação por gotejamento e edificações planejadas para eficiência hídrica reduzem drasticamente o consumo per capita em condomínios, hospitais e aeroportos.</p>
+      </div>
+      <div class="sol-card">
+        <div class="sol-icon-wrap">📚</div>
+        <p class="sol-title">Educação e Cultura Hídrica</p>
+        <p class="sol-desc">Transformar a relação dos brasileiros com a água — do desperdício inconsciente à consciência de escassez — é essencial. Programas escolares, campanhas e tarifação progressiva são ferramentas-chave.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="vdivider"></div>
+
+<!-- O QUE VOCÊ PODE FAZER -->
+<section id="acao" class="actions-band">
+  <div class="container">
+    <div class="reveal" style="text-align:center; margin-bottom:2.5rem;">
+      <p class="section-label">Seu papel</p>
+      <h2 class="section-title">O que você pode<br><em>fazer agora</em></h2>
+      <div class="divider" style="margin: 1rem auto;"></div>
+    </div>
+
+    <div class="actions-grid reveal">
+      <div class="action-tile">
+        <div class="icon">🚿</div>
+        <p>Reduza o tempo no banho para no máximo 5 minutos — economiza até 100 litros por vez</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">🔩</div>
+        <p>Conserte torneiras e vasos que pingam imediatamente. Um pingo por segundo desperdiça 46 litros por dia</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">🪣</div>
+        <p>Instale uma cisterna ou balde coletor de água da chuva para lavar calçadas e regar plantas</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">🍽️</div>
+        <p>Lave a louça com a torneira fechada e use-a apenas para enxague final</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">🌿</div>
+        <p>Regue jardins ao amanhecer ou ao entardecer para evitar evaporação</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">📢</div>
+        <p>Denuncie vazamentos nas ruas à empresa de saneamento do seu município</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">🗳️</div>
+        <p>Cobre dos seus representantes investimentos em saneamento e redução de perdas na rede</p>
+      </div>
+      <div class="action-tile">
+        <div class="icon">📖</div>
+        <p>Compartilhe informação: conhecimento transforma comportamentos e gera pressão social por mudanças</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p style="font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--ciano); margin-bottom:1.2rem;">H₂O Brasil</p>
+    <p>Dados baseados no <strong>Estudo de Perdas de Água 2025</strong> (Instituto Trata Brasil / GO Associados, SINISA 2023),<br>
+    Agência Nacional de Águas e Saneamento Básico (ANA), The Nature Conservancy Brasil,<br>
+    Agência Brasil (EBC) e Agência Pública.</p>
+    <br>
+    <p style="font-size:0.72rem; opacity:0.5;">Este documento tem fins educativos e informativos. Atualizado em maio de 2026.</p>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Bar chart animation
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.bar-fill[data-pct]').forEach(bar => {
+          const pct = parseFloat(bar.dataset.pct);
+          bar.style.width = pct + '%';
+        });
+        barObs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const chart = document.getElementById('barChart');
+  if (chart) barObs.observe(chart);
+
+  // Counter animation for hero stats
+  function animateCounter(el, target, suffix, decimals = 0) {
+    let start = 0;
+    const duration = 1800;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = eased * target;
+      el.textContent = decimals > 0 ? current.toFixed(decimals).replace('.', ',') + suffix : Math.round(current).toLocaleString('pt-BR') + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+</script>
+</body>
+</html>
